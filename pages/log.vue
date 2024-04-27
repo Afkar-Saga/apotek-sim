@@ -16,7 +16,7 @@
           <tr v-if="pending">
             <td class="loader" colspan="4"><Loader /></td>
           </tr>
-          <tr v-for="(log, index) in logs" :key="log.id">
+          <tr v-else v-for="(log, index) in logs" :key="log.id">
             <th>{{ index + 1 }}</th>
             <td>{{ log.users.username }}</td>
             <td>{{ log.waktu.split('.')[0].replace('T', ' ') }}</td>
