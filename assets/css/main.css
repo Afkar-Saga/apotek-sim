@@ -110,6 +110,16 @@
       background-color: #ecec28;
     }
   }
+  &.add {
+    width: auto;
+    background-color: transparent;
+    color: #0c0;
+    outline: 2px dashed #0c0;
+
+    &:hover {
+      background-color: #bfb;
+    }
+  }
 }
 .delete {
   background-color: #730606;
