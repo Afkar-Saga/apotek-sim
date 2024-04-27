@@ -6,12 +6,12 @@
         <img src="~/assets/img/logo_apoteker.png" alt="Apoteker" v-if="tipe_user == 'Apoteker'">
         <img src="~/assets/img/logo_kasir.png" alt="Kasir" v-if="tipe_user == 'Kasir'">
         <div class="username">{{ username }}</div>
-        <NuxtLink to="/log" v-if="['Admin'].includes(tipe_user)" :class="{ active: route.includes('log') }">Log Activity</NuxtLink>
-        <NuxtLink to="/users" v-if="['Admin'].includes(tipe_user)" :class="{ active: route.includes('users') }">Kelola User</NuxtLink>
-        <NuxtLink to="/obat" v-if="['Admin', 'Apoteker'].includes(tipe_user)" :class="{ active: route.includes('obat') }">Kelola Obat</NuxtLink>
-        <NuxtLink to="/resep" v-if="['Admin', 'Apoteker'].includes(tipe_user)" :class="{ active: route.includes('resep') }">Kelola Resep</NuxtLink>
-        <NuxtLink to="/transaksi" v-if="['Admin', 'Kasir'].includes(tipe_user)" :class="{ active: route.includes('transaksi') }">Transaksi</NuxtLink>
-        <NuxtLink to="/laporan" v-if="['Admin'].includes(tipe_user)" :class="{ active: route.includes('laporan') }">Laporan</NuxtLink>
+        <NuxtLink to="/log" v-if="['Admin'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('log') }">Log Activity</NuxtLink>
+        <NuxtLink to="/users" v-if="['Admin'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('users') }">Kelola User</NuxtLink>
+        <NuxtLink to="/obat" v-if="['Admin', 'Apoteker'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('obat') }">Kelola Obat</NuxtLink>
+        <NuxtLink to="/resep" v-if="['Admin', 'Apoteker'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('resep') }">Kelola Resep</NuxtLink>
+        <NuxtLink to="/transaksi" v-if="['Admin', 'Kasir'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('transaksi') }">Transaksi</NuxtLink>
+        <NuxtLink to="/laporan" v-if="['Admin'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('laporan') }">Laporan</NuxtLink>
       </Navbar>
       <div class="main">
         <main class="content">
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-const route = useRoute().name.split('-')[0]
+const route = useRoute()
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 

@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <tr v-if="pending">
-            <td class="loader" colspan="4"><Loader /></td>
+            <td colspan="4"><Loader class="loader" /></td>
           </tr>
           <tr v-else v-for="(log, index) in logs" :key="log.id">
             <th>{{ index + 1 }}</th>

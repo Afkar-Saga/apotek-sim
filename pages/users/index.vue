@@ -19,7 +19,7 @@
         </thead>
         <tbody>
           <tr v-if="pending">
-            <td class="loader"><Loader /></td>
+            <td colspan="9"><Loader class="loader" /></td>
           </tr>
           <tr v-else v-for="(user, index) in users" :key="user.id">
             <th>{{ index + 1 }}</th>
