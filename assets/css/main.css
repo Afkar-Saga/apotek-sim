@@ -1,8 +1,91 @@
 @font-face {
   font-family: 'Source Sans 3';
   src: url('/fonts/SourceSans3-VariableFont_wght.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
 * {
   font-family: 'Source Sans 3', sans-serif;
+}
+
+
+.input {
+  position: relative;
+  width: 480px;
+  height: 50px;
+
+  input, select {
+    width: 100%;
+    height: 100%;
+    padding: 8px 20px;
+    background-color: #fafafa;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    box-shadow: 0 6px 2px rgba(0, 0, 0, 0.25);
+    outline: none;
+    transition: .3s;
+  }
+
+  label {
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    color: #777;
+    pointer-events: none;
+    transition: .5s;
+  }
+
+  select, input::placeholder {
+    color: #777;
+  }
+  select option:not(:first-of-type), select.selected {
+    color: black;
+  }
+}
+.input input:focus ~ label, .input input:not(:placeholder-shown) ~ label {
+  top: 0;
+  left: 15px;
+  color: #070;
+  font-size: 12px;
+  font-weight: bold;
+}
+.input input:hover, .input select:hover, .input select:focus {
+  background-color: #afa;
+  border-color: #121212;
+}
+.submit {
+  width: 285px;
+  height: 50px;
+  background-color: #090;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .3s;
+
+  &:hover {
+    background-color: #070;
+  }
+  &.edit {
+    background-color: #ffff6a;
+    color: black;
+
+    &:hover {
+      background-color: #ecec28;
+    }
+  }
+}
+.delete {
+  background-color: #730606;
+  color: #f75353;
+  border: 2px solid #f75353;
+
+  &:hover {
+    background-color: #a50808;
+  }
 }
