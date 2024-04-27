@@ -176,6 +176,9 @@ table {
     background-color: #e0e0e0;
   }
 }
+.loader {
+  margin: auto;
+}
 
 .detail {
   display: flex;
