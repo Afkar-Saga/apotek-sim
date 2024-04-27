@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('/fonts/SourceSans3-VariableFont_wght.ttf');
+}
+
+* {
+  font-family: 'Source Sans 3', sans-serif;
+}
