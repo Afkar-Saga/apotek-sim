@@ -38,10 +38,18 @@
         </tbody>
       </table>
     </div>
+    <div class="container">
+      <Bar v-if="!(pending) && !(filterStatus == 'pending')" :data="chartData" :options="chartOptions" />
+    </div>
   </div>
 </template>
 
 <script setup>
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, plugins, scales } from 'chart.js'
+import { Bar } from 'vue-chartjs'
+
+ChartJS.register(CategoryScale, Title, Tooltip, Legend, BarElement, LinearScale)
+
 definePageMeta({
   layout: 'main',
   middleware: 'auth'
@@ -54,7 +62,7 @@ const dateRange = ref({
 })
 
 const { data: transaksis, pending } = useAsyncData('transaksi', async () => {
-  const { data, error } = await supabase.from('transaksi').select().order('tgl_transaksi', { ascending: false })
+  const { data, error } = await supabase.from('transaksi').select()
   if (error) throw error
   return data
 })
@@ -64,6 +72,31 @@ const { data: filteredTransaksi, execute: filterTransaksi, status: filterStatus 
   if (error) throw error
   return data
 }, { immediate: false })
+
+function chartLabels(transaksi) {
+  return [...new Set(transaksi.map(row => row.tgl_transaksi))]
+}
+function chartDatas(transaksi) {
+  return Object.values(transaksi.reduce((acc, { tgl_transaksi, total_bayar }) => ({
+    ...acc, [tgl_transaksi]: (acc[tgl_transaksi] || 0) + total_bayar
+  }), {}))
+}
+
+const chartData = computed(() => {
+  return {
+    labels: filteredTransaksi.value ? chartLabels(filteredTransaksi.value) : chartLabels(transaksis.value),
+    datasets: [{
+      label: 'Omset',
+      data: filteredTransaksi.value ? chartDatas(filteredTransaksi.value) : chartDatas(transaksis.value),
+      backgroundColor: 'rgb(53, 162, 235)',
+      maxBarThickness: 200
+    }]
+  }
+})
+
+const chartOptions = ref({
+  responsive: true
+})
 
 watch(dateRange.value, () => {
   if (dateRange.value.from && dateRange.value.to) filterTransaksi()
