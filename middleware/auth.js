@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to) => {
     else return navigateTo('/')
   }
   if (user.value.user_metadata.tipe_user == 'Kasir') {
-    if (['index', 'transaksi'].includes(to.name.split('-')[0])) return
+    if (['index', 'transaksi', 'laporan'].includes(to.name.split('-')[0])) return
     else return navigateTo('/')
   }
 })

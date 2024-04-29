@@ -36,7 +36,7 @@
     animation-delay: 0.5s;
     background: #ffd166;
   }
-  &:nth-child(1) {
+  &:nth-child(3) {
     animation-delay: 1s;
     background: #06d6a0;
   }

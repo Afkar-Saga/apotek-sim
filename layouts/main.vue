@@ -11,7 +11,7 @@
         <NuxtLink to="/obat" v-if="['Admin', 'Apoteker'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('obat') }">Kelola Obat</NuxtLink>
         <NuxtLink to="/resep" v-if="['Admin', 'Apoteker'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('resep') }">Kelola Resep</NuxtLink>
         <NuxtLink to="/transaksi" v-if="['Admin', 'Kasir'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('transaksi') }">Transaksi</NuxtLink>
-        <NuxtLink to="/laporan" v-if="['Admin'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('laporan') }">Laporan</NuxtLink>
+        <NuxtLink to="/laporan" v-if="['Admin', 'Kasir'].includes(tipe_user)" :class="{ active: route.name.split(['-'])[0].includes('laporan') }">Laporan</NuxtLink>
       </Navbar>
       <div class="main">
         <main class="content">

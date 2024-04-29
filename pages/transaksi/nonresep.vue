@@ -4,13 +4,13 @@
     <form @submit.prevent="bayar">
       <div class="input-group" v-for="(form, index) in formObat" :key="index">
         <div class="input">
-          <select v-model="form.id" :class="{ selected: form.id }" @change="getHarga(form.id, index)" required>
+          <select v-model="form.id" :class="{ selected: form.id }" @change="getHargaAndJumlah(form.id, index)" required>
             <option disabled value="0">Pilih Obat</option>
             <option v-for="(obat, index) in obats" :key="obat.id" :value="obat.id">{{ obat.nama_obat }}</option>
           </select>
         </div>
         <div class="input">
-          <input type="number" v-model="form.jumlah_obat" placeholder=" " required>
+          <input type="number" v-model="form.jumlah_obat" min="1" :max="form.max_jumlah" placeholder=" " required>
           <label>Jumlah</label>
         </div>
       </div>
@@ -39,7 +39,8 @@ const user = useSupabaseUser()
 const formObat = ref([{
   id: 0,
   harga: 0,
-  jumlah_obat: 0
+  jumlah_obat: 1,
+  max_jumlah: 0
 }])
 const totalBayar = computed(() => {
   return formObat.value.reduce((total, current) => {
@@ -51,7 +52,8 @@ const tambahObat = () => {
   formObat.value.push({
     id: 0,
     harga: 0,
-    jumlah_obat: 0
+    jumlah_obat: 1,
+    max_jumlah: 0
   })
 }
 
@@ -61,10 +63,13 @@ const { data: obats } = useAsyncData('obat', async () => {
   return data
 })
 
-async function getHarga(obatId, i) {
-  const { data, error } = await supabase.from('obat').select('harga').eq('id', obatId).maybeSingle()
+async function getHargaAndJumlah(obatId, i) {
+  const { data, error } = await supabase.from('obat').select('harga, jumlah').eq('id', obatId).maybeSingle()
   if (error) throw error
-  if (data) formObat.value[i].harga = data.harga
+  if (data) {
+    formObat.value[i].harga = data.harga
+    formObat.value[i].max_jumlah = data.jumlah
+  }
 }
 
 const { execute: bayar, error, status } = useAsyncData('transaksi', async () => {
@@ -85,7 +90,16 @@ const { execute: bayar, error, status } = useAsyncData('transaksi', async () => 
     const { error } = await supabase.from('transaksi_obat').upsert(transaksi, { onConflict: 'id_transaksi, id_obat' })
     if (error) throw error
     else {
-      alert('Transaksi berhasil')
+      formObat.value.forEach(async (obat) => {
+        const { data, error } = await supabase.from('obat').select('jumlah').eq('id', obat.id).maybeSingle()
+        if (error) throw error
+        if (data) {
+          const newJumlah = data.jumlah - obat.jumlah_obat
+          const { error } = await supabase.from('obat').update({ jumlah: newJumlah }).eq('id', obat.id)
+          if (error) throw error
+        }
+      })
+      alert('Berhasil melakukan transaksi')
       navigateTo('/transaksi')
     }
   }
@@ -95,9 +109,4 @@ const { execute: bayar, error, status } = useAsyncData('transaksi', async () => 
 
 <style scoped>
 @import url('~/assets/css/main.css');
-.total {
-  color: #090;
-  font-size: 2.5em;
-  font-weight: bold;
-}
 </style>

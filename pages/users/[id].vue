@@ -32,7 +32,7 @@
           <label>Alamat</label>
         </div>
         <div class="input">
-          <input type="tel" v-model="form.telpon" pattern="08[0-9]{10}" placeholder=" " required>
+          <input type="tel" v-model="form.telpon" placeholder=" " required>
           <label>Telpon (e.g. 081283439986)</label>
         </div>
         <div class="input">

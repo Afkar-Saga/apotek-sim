@@ -1,6 +1,43 @@
 <template>
   <div>
-    
+    <div class="title">Laporan</div>
+    <div class="input-group">
+      <label for="from">Dari Tanggal: </label>
+      <div class="input">
+        <input type="date" id="from" v-model="dateRange.from">
+      </div>
+      <label for="to">Sampai Tanggal: </label>
+      <div class="input">
+        <input type="date" id="to" v-model="dateRange.to">
+      </div>
+    </div>
+    <div class="table">
+      <table>
+        <caption>Transaksi</caption>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tanggal Transaksi</th>
+            <th>Total Bayar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="pending || filterStatus == 'pending'">
+            <td colspan="3"><Loader class="loader" /></td>
+          </tr>
+          <tr v-else-if="!filteredTransaksi" v-for="(transaksi, index) in transaksis" :key="transaksi.id">
+            <th>{{ index + 1 }}</th>
+            <td>{{ transaksi.tgl_transaksi }}</td>
+            <td>{{ transaksi.total_bayar }}</td>
+          </tr>
+          <tr v-else v-for="(transaksi, index) in filteredTransaksi" :key="index">
+            <th>{{ index + 1 }}</th>
+            <td>{{ transaksi.tgl_transaksi }}</td>
+            <td>{{ transaksi.total_bayar }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -9,8 +46,33 @@ definePageMeta({
   layout: 'main',
   middleware: 'auth'
 })
+
+const supabase = useSupabaseClient()
+const dateRange = ref({
+  from: '',
+  to: ''
+})
+
+const { data: transaksis, pending } = useAsyncData('transaksi', async () => {
+  const { data, error } = await supabase.from('transaksi').select().order('tgl_transaksi', { ascending: false })
+  if (error) throw error
+  return data
+})
+
+const { data: filteredTransaksi, execute: filterTransaksi, status: filterStatus } = useAsyncData('filteredTransaksi', async () => {
+  const { data, error } = await supabase.from('transaksi').select().gte('tgl_transaksi', dateRange.value.from).lte('tgl_transaksi', dateRange.value.to)
+  if (error) throw error
+  return data
+}, { immediate: false })
+
+watch(dateRange.value, () => {
+  if (dateRange.value.from && dateRange.value.to) filterTransaksi()
+})
 </script>
 
 <style scoped>
-
+@import url('~/assets/css/main.css');
+.input-group {
+  align-items: center;
+}
 </style>

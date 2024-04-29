@@ -20,10 +20,6 @@
           <label>No Resep</label>
         </div>
         <div class="input">
-          <input type="date" v-model="form.tgl_resep" placeholder=" " required>
-          <label>Tanggal Resep</label>
-        </div>
-        <div class="input">
           <input type="text" v-model="form.nama_dokter" placeholder=" " required>
           <label>Nama Dokter</label>
         </div>
@@ -70,7 +66,6 @@ const supabase = useSupabaseClient()
 
 const form = ref({
   no_resep: '',
-  tgl_resep: '',
   nama_dokter: '',
   nama_pasien: ''
 })
