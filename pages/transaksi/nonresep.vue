@@ -13,6 +13,10 @@
           <input type="number" v-model="form.jumlah_obat" min="1" :max="form.max_jumlah" placeholder=" " required>
           <label>Jumlah</label>
         </div>
+        <div class="input">
+          <input type="text" v-model="form.harga" disabled>
+          <label>Harga per Satuan</label>
+        </div>
       </div>
       <button type="button" class="submit add" @click="tambahObat">+ Tambah Obat</button>
       <div class="container">
